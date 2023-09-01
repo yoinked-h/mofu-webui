@@ -1,0 +1,3 @@
+model_arch = "gpt-neox"
+module = "cformers"
+download_url = "https://huggingface.co/yoinked/merges/blob/main/ggml/pygmalion1.3b-q4_0.bin"
