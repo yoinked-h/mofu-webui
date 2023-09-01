@@ -1,0 +1,5 @@
+#ignore the large model files in ./models/
+models/
+__pycache__/
+*.py[cod]
+*$py.class
