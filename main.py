@@ -37,7 +37,7 @@ def inference(text, new, should=False):
         text,
         params
     )
-    return outpt, text if not should else outpt
+    return outpt, text if not should else text + outpt
 def download(modurl, name, really, arch, modname):
     """Download a model file."""
     if really:
@@ -75,7 +75,7 @@ with gr.Blocks(analytics_enabled=False, theme="NoCrypt/miku") as demo:
             modeloutput = gr.Textbox(label="output text", lines=15,)
             with gr.Row():
                 infer = gr.Button("Inference")
-                append = gr.Checkbox(label="append output?", value=False)
+                append = gr.Checkbox(label="append output?", interactive=True)
                 maxnewtokens = gr.Slider(minimum=20, maximum=250, step=5,
                                         label="max new tokens", value=75)
         infer.click(inference, inputs=[prompt, maxnewtokens, append], outputs=[modeloutput, prompt])
