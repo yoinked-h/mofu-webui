@@ -29,6 +29,7 @@ def initialize():
         "temperature": 0.5,
         "repetition_penalty": 1.0,
     }
+initialize()
 def inference(text, new, should=False):
     """Generate text using the model."""
     params.update({"max_new_tokens": new})
