@@ -31,5 +31,4 @@ def get_required_model_class(modpath:Path):
     """get the model class for the model at `modpath`"""
     with open(modpath.with_suffix("".join(modpath.suffix+".toml")), "r", encoding="utf-8") as _:
         _cfg = toml.load(_)
-    _cfg['module'] = modpath
-    return import_custom_module("ctransformers")
+    return import_custom_module(_cfg['module'])
