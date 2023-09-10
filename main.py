@@ -2,6 +2,7 @@
 from pathlib import Path
 
 import requests
+import argparse
 import toml
 import gradio as gr
 
@@ -130,4 +131,7 @@ with gr.Blocks(analytics_enabled=False, theme="NoCrypt/miku") as demo:
                 download,
                 inputs=[url, modelname, areyousure, modelarch, modulename],
             )
-demo.queue(concurrency_count=5, max_size=20).launch()
+parser = argparse.ArgumentParser()
+parser.add_argument('--share', '-s', action='store_true', default=False)
+args = parser.parse_args()
+demo.queue(concurrency_count=5, max_size=20).launch(share=args.share)
