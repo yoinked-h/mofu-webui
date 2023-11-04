@@ -1,4 +1,5 @@
 model_arch = "gpt-neox"
 module = "cformers"
 download_url = "https://huggingface.co/yoinked/merges/blob/main/ggml/model.bin"
-extra_data = {"extra_info":"used in the module"}
+[extra_data]
+extra_info = "whatever you want"
