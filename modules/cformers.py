@@ -22,10 +22,14 @@ class CformerModel(Model):
         #open the toml located at "{modelname}.toml"
         with open(f"{model}.toml", "r", encoding="utf-8") as _:
             self.cfg = toml.load(_)
+            if "extra_data" in self.cfg.keys():
+                self.gpulayers = self.cfg["extra_data"]["gpu_layers"]
+            else:
+                self.gpulayers = None
         for lib in ["avx2", "avx", "basic"]:
             try:
-                self.model = AutoModelForCausalLM.from_pretrained(f"{model.replace('.bin','')}.bin",
-                                lib=lib, model_type=self.cfg["model_arch"], local_files_only=True)
+                self.model = AutoModelForCausalLM.from_pretrained(model,
+                                lib=lib, model_type=self.cfg["model_arch"], local_files_only=True, gpu_layers=self.gpulayers)
                 break
             except FileNotFoundError:
                 pass
@@ -61,7 +65,7 @@ class CformerModel(Model):
             try:
                 model_file = f"{model_name.replace('.bin', '')}.bin"
                 self.model = AutoModelForCausalLM.from_pretrained(model_file, lib=lib,
-                                model_type=self.cfg["model_arch"], local_files_only=True)
+                                model_type=self.cfg["model_arch"], local_files_only=True, gpu_layers=self.gpulayers)
                 break
             except FileNotFoundError:
                 pass

@@ -12,10 +12,11 @@ cm.import_all_custom_modules_needed()
 def get_smallest_model():
     """Get the smallest model in the models directory."""
     models = []
-    for fending in ("*.bin", "*.safetensors"):
-        for path in Path("./models").glob(fending):
-            size = path.stat().st_size
-            models.append((size, path))
+    for path in Path("./models").glob("*.*"):
+        if path.suffix != ".toml":
+            continue
+        size = path.stat().st_size
+        models.append((size, path))
     return min(models, key=lambda x: x[0])
 def initialize():
     """Initialize the model and parameters."""
@@ -44,7 +45,7 @@ def download(modurl, name, really, arch, modname):
     if really:
         name = name or modurl.split("/")[-1]
 
-        name = name if name.endswith(".bin") else name + ".bin"
+        name = name if name.endswith(".*") else name + ".bin"
         with open(Path(f"./models/{name}"), "wb") as _:
             _.write(requests.get(modurl, timeout=30).content)
 
@@ -61,9 +62,11 @@ def get_models():
     """
     Returns a list of all the model files in the `models` directory.
     """
-    fullname = Path("./models").glob("*.bin")
+    fullname = Path("./models").glob("*.*")
     sname = []
     for i in fullname:
+        if i.suffix == ".toml":
+            continue
         sname.append(i)
     return sname
 
@@ -131,7 +134,9 @@ with gr.Blocks(analytics_enabled=False, theme="NoCrypt/miku") as demo:
                 download,
                 inputs=[url, modelname, areyousure, modelarch, modulename],
             )
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--share', '-s', action='store_true', default=False)
+parser.add_argument('--api', '-a', action='store_true', default=False)
 args = parser.parse_args()
-demo.queue(concurrency_count=5, max_size=20).launch(share=args.share)
+demo.queue(concurrency_count=5, max_size=20).launch(share=args.share, show_api=args.api)
