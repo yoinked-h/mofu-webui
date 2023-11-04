@@ -1,8 +1,8 @@
 """mofu webui"""
 from pathlib import Path
 
-import requests
 import argparse
+import requests
 import toml
 import gradio as gr
 
@@ -13,7 +13,7 @@ def get_smallest_model():
     """Get the smallest model in the models directory."""
     models = []
     for path in Path("./models").glob("*.*"):
-        if path.suffix != ".toml":
+        if path.suffix == ".toml":
             continue
         size = path.stat().st_size
         models.append((size, path))
@@ -86,7 +86,7 @@ with gr.Blocks(analytics_enabled=False, theme="NoCrypt/miku") as demo:
     with gr.Tab("Model"):
         with gr.Row():
             drop = gr.Dropdown(label="model", choices=get_models(),
-                            multiselect=False, value=model.originalname)
+                            multiselect=False, value=model.originalname, allow_custom_value=True)
             hiddenCheckbox = gr.Checkbox(label="switch model", value=False, visible=False)
             refreshlist = gr.Button("refresh list")
             refreshlist.click(
@@ -139,4 +139,4 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--share', '-s', action='store_true', default=False)
 parser.add_argument('--api', '-a', action='store_true', default=False)
 args = parser.parse_args()
-demo.queue(concurrency_count=5, max_size=20).launch(share=args.share, show_api=args.api)
+demo.queue(max_size=20).launch(share=args.share, show_api=args.api, max_threads=4)

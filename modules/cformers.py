@@ -25,11 +25,12 @@ class CformerModel(Model):
             if "extra_data" in self.cfg.keys():
                 self.gpulayers = self.cfg["extra_data"]["gpu_layers"]
             else:
-                self.gpulayers = None
+                self.gpulayers = 0
         for lib in ["avx2", "avx", "basic"]:
             try:
                 self.model = AutoModelForCausalLM.from_pretrained(model,
-                                lib=lib, model_type=self.cfg["model_arch"], local_files_only=True, gpu_layers=self.gpulayers)
+                                lib=lib, model_type=self.cfg["model_arch"], local_files_only=True,
+                                gpu_layers=self.gpulayers)
                 break
             except FileNotFoundError:
                 pass
@@ -60,12 +61,17 @@ class CformerModel(Model):
             return True
         with open(f"{model_name}.toml", "r", encoding="utf-8") as _:
             self.cfg = toml.load(_)
+            if "extra_data" in self.cfg.keys():
+                self.gpulayers = self.cfg["extra_data"]["gpu_layers"]
+            else:
+                self.gpulayers = 0
         libraries = ["avx2", "avx", "basic"]
         for lib in libraries:
             try:
                 model_file = f"{model_name.replace('.bin', '')}.bin"
                 self.model = AutoModelForCausalLM.from_pretrained(model_file, lib=lib,
-                                model_type=self.cfg["model_arch"], local_files_only=True, gpu_layers=self.gpulayers)
+                                model_type=self.cfg["model_arch"], local_files_only=True,
+                                gpu_layers=self.gpulayers)
                 break
             except FileNotFoundError:
                 pass

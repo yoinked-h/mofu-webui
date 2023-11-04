@@ -2,7 +2,7 @@
 title: mofu-webui
 app_file: main.py
 sdk: gradio
-sdk_version: 3.40.1
+sdk_version: 4.1.1
 ---
 []("huggingface/metadata/above")
 
