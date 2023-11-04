@@ -13,7 +13,7 @@ made due to nocrypt's theme (Hatsune Miku)
 
 how to install:
 1. clone the repo (`git clone https://github.com/yoinked-h/mofu-webui`)
-2. install reqs (`pip install -r requirements.txt`)
+2. install reqs (`pip install -r base-requirements.txt` and `pip install -r module-requirements.txt`)
 3. run webui (`python main.py`)
 
 thanks:
