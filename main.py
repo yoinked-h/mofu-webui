@@ -34,14 +34,19 @@ def initialize():
 initialize()
 def inference(text, new, should=False):
     """Generate text using the model."""
-    params.update({"max_new_tokens": new})
-    outpt = model(
-        text,
-        params
-    )
-    return outpt, text if not should else text + outpt
+    params.update({"max_new_tokens": 1})
+    x = text
+    for n in range(new):
+        txt = model.generate(x, params)
+        x += txt
+        if should:
+            yield x, x
+        else:
+            yield x, text
+    
 def download(modurl, name, really, arch, modname):
     """Download a model file."""
+    print(modurl)
     if really:
         name = name or modurl.split("/")[-1]
 
@@ -139,4 +144,4 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--share', '-s', action='store_true', default=False)
 parser.add_argument('--api', '-a', action='store_true', default=False)
 args = parser.parse_args()
-demo.queue(max_size=20).launch(share=args.share, show_api=args.api, max_threads=4)
+demo.queue(max_size=20).launch(share=args.share, show_api=args.api, max_threads=1)

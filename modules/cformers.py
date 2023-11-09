@@ -8,7 +8,7 @@ BASECFG = {
     "top_p": 0.9,
     "temperature": 0.5,
     "repetition_penalty": 1.0,
-    "threads": 4
+    "threads": 6
 }
 
 
